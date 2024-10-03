@@ -6,7 +6,9 @@ import ResultModal from './ResultModal';
 // So this is not a good practice in a real-world application. We will use the useRef hook to store the timer ID instead.
 
 export default function TimerChallenge({ title, targetTime }) {
-    const timer = useRef(null);
+    const timer = useRef();
+    const dialog = useRef();
+
     const [timerStarted, setTimerStarted] = useState(false);
     const [timerExpired, setTimerExpired] = useState(false);
 
@@ -14,18 +16,19 @@ export default function TimerChallenge({ title, targetTime }) {
         setTimerStarted(true);
         timer.current = setTimeout(() => {
             setTimerExpired(true);
+            dialog.current.showModal();
         }, targetTime * 1000);
     }
 
     function handleStop() {
         clearTimeout(timer.current);
-        setTimerStarted(false);
-        setTimerExpired(false);
+        //setTimerStarted(false);
+        //setTimerExpired(false);
     }
 
     return (
         <>
-            {timerExpired && <ResultModal result={timerExpired ? 'lost' : 'succeeded'} targetTime={targetTime} />}
+            <ResultModal ref={dialog} result={timerExpired ? 'lost' : 'succeeded'} targetTime={targetTime} />
             <section className="challenge" id="timer">
                 <h2>{title}</h2>
                 <p className="challenge-time">
