@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import ResultModal from './ResultModal';
 
 //let timer; // This variable will store the timer ID Is necessary to put it outside the component to avoid creating a new timer every time the component re-renders.
 // But it's important to remember that this is a global variable, so it's shared among all instances of the TimerChallenge component.
@@ -23,20 +24,22 @@ export default function TimerChallenge({ title, targetTime }) {
     }
 
     return (
-        <section className="challenge" id="timer">
-            <h2>{title}</h2>
-            {timerExpired ? <p className="expired">Time's up!</p> : null}
-            <p className="challenge-time">
-                {targetTime} second{targetTime > 1 ? 's' : ''}
-            </p>
-            <p>
-                <button onClick={timerStarted ? handleStop : handleStart}>
-                    {!timerStarted ? 'Start' : 'Stop'} Challenge
-                </button>
-            </p>
-            <p className={timerStarted ? 'active' : undefined}>
-                {timerStarted ? 'Time is running...' : 'Timer inactive'}
-            </p>
-        </section>
+        <>
+            {timerExpired && <ResultModal result={timerExpired ? 'lost' : 'succeeded'} targetTime={targetTime} />}
+            <section className="challenge" id="timer">
+                <h2>{title}</h2>
+                <p className="challenge-time">
+                    {targetTime} second{targetTime > 1 ? 's' : ''}
+                </p>
+                <p>
+                    <button onClick={timerStarted ? handleStop : handleStart}>
+                        {!timerStarted ? 'Start' : 'Stop'} Challenge
+                    </button>
+                </p>
+                <p className={timerStarted ? 'active' : undefined}>
+                    {timerStarted ? 'Time is running...' : 'Timer inactive'}
+                </p>
+            </section>
+        </>
     );
 }
